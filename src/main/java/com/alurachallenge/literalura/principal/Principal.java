@@ -4,9 +4,11 @@ import com.alurachallenge.literalura.model.DatosAutor;
 import com.alurachallenge.literalura.model.DatosBusqueda;
 import com.alurachallenge.literalura.model.DatosLibro;
 import com.alurachallenge.literalura.model.Libro;
+import com.alurachallenge.literalura.repository.LibroRepository;
 import com.alurachallenge.literalura.service.ConsumoAPI;
 import com.alurachallenge.literalura.service.ConvierteDatos;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +18,11 @@ public class Principal {
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/books/?search=";
     private ConvierteDatos conversor = new ConvierteDatos();
-    private List<Libro> libros;
+    private LibroRepository repository;
+    public Principal(LibroRepository repository){
+        this.repository = repository;
+    }
+
 
     /*public void muestrMenu(){
         var opcion = -1;
@@ -46,6 +52,7 @@ public class Principal {
 
 
     private DatosBusqueda getBusqueda() {
+
         String json = consumoAPI.obtenerDatos(URL_BASE + "romeo");
         System.out.printf(json+"\n");
         DatosBusqueda datos = conversor.obtenerDatos(json, DatosBusqueda.class);
@@ -56,11 +63,17 @@ public class Principal {
 
     public void buscarLibro(){
 
-        try {
-
         DatosBusqueda datosBusqueda = getBusqueda();
         if (datosBusqueda != null && !datosBusqueda.resultado().isEmpty()){
             DatosLibro primerLibro = datosBusqueda.resultado().get(0);
+            System.out.println(primerLibro);
+
+            Libro libro = new Libro(primerLibro);
+            System.out.println("----- Libro -----");
+            System.out.println(libro);
+            System.out.println("-----------------");
+
+            //repository.save(libro);
 
             if (!primerLibro.autor().isEmpty()){
                 DatosAutor autor = primerLibro.autor().get(0);
@@ -73,8 +86,11 @@ public class Principal {
         } else {
             System.out.println("No se encontraron libros");
         }
-        } catch (IllegalStateException e){
-            System.out.printf("error");
-        }
+
     }
+
+    /*public void test(){
+        DatosBusqueda datos = getBusqueda();
+        Libro libro = new Libro(datos);
+    }*/
 }
