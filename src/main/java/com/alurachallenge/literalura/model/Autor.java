@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "autores")
@@ -28,7 +29,22 @@ public class Autor {
 
     @Override
     public String toString() {
-        return String.format("Nombre: %s%nLibros: %s%nFecha de Nacimiento: %s%nFecha de Deceso: %s",nombre,libro,fecha_nacimiento,fecha_deceso);
+        StringBuilder librosStr = new StringBuilder();
+        librosStr.append("Libros: ");
+        //librosStr.append("\n");
+        /*for (Libro unlibro : libro) {
+            librosStr.append(unlibro.getTitulo());
+            librosStr.append(", ");
+        }*/
+
+        //Separar cada libro por una coma
+        for (int i = 0; i < libro.size() ; i++) {
+            librosStr.append(libro.get(i).getTitulo());
+            if (i < libro.size() - 1 ){
+                librosStr.append(", ");
+            }
+        }
+        return String.format("---------- Autor ----------%nNombre: %s%n%s%nFecha de Nacimiento: %s%nFecha de Deceso: %s%n---------------------------%n",nombre,librosStr.toString(),fecha_nacimiento,fecha_deceso);
     }
 
     public List<Libro> getLibro() {

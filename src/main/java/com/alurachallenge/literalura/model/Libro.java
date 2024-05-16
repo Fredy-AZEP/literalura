@@ -28,7 +28,8 @@ public class Libro {
     public String toString() {
         String idioma = String.join(", ", lenguaje);
         idioma = idioma.replace("[","").replace("]","");
-        return String.format("Titulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargar: %d",titulo,autor,idioma,numero_descargas);
+        String nombreAutor = autor.getNombre();
+        return String.format("---------- Libro ----------%nTitulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargar: %d%n---------------------------%n",titulo,nombreAutor,idioma,numero_descargas);
     }
 
     public Long getId() {
