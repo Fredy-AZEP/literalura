@@ -1,15 +1,15 @@
 package com.alurachallenge.literalura.principal;
 
-import com.alurachallenge.literalura.model.DatosAutor;
-import com.alurachallenge.literalura.model.DatosBusqueda;
-import com.alurachallenge.literalura.model.DatosLibro;
-import com.alurachallenge.literalura.model.Libro;
+import com.alurachallenge.literalura.model.*;
+import com.alurachallenge.literalura.repository.AutorRepository;
 import com.alurachallenge.literalura.repository.LibroRepository;
 import com.alurachallenge.literalura.service.ConsumoAPI;
 import com.alurachallenge.literalura.service.ConvierteDatos;
 
-import java.sql.SQLOutput;
+import java.sql.ClientInfoStatus;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Principal {
@@ -18,9 +18,14 @@ public class Principal {
     private ConsumoAPI consumoAPI = new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/books/?search=";
     private ConvierteDatos conversor = new ConvierteDatos();
-    private LibroRepository repository;
-    public Principal(LibroRepository repository){
-        this.repository = repository;
+    private LibroRepository repositoryLibro;
+    private AutorRepository repositoryAutor;
+    private List<Autor> autores;
+    private List<Libro> libros;
+
+    public Principal(LibroRepository repositoryLibro, AutorRepository repositoryAutor) {
+        this.repositoryLibro = repositoryLibro;
+        this.repositoryAutor = repositoryAutor;
     }
 
 
@@ -53,44 +58,65 @@ public class Principal {
 
     private DatosBusqueda getBusqueda() {
 
-        String json = consumoAPI.obtenerDatos(URL_BASE + "romeo");
-        System.out.printf(json+"\n");
+        //String json = consumoAPI.obtenerDatos(URL_BASE + "romeo");
+        //String json = consumoAPI.obtenerDatos(URL_BASE + "macbeth");
+        //String json = consumoAPI.obtenerDatos(URL_BASE + "Shakespeare%27s%20Sonnets");
+        String json = consumoAPI.obtenerDatos(URL_BASE + "adsdasd");
+        System.out.printf(json + "\n");
         DatosBusqueda datos = conversor.obtenerDatos(json, DatosBusqueda.class);
         return datos;
 
     }
 
 
-    public void buscarLibro(){
+    public void buscarLibro() {
 
         DatosBusqueda datosBusqueda = getBusqueda();
-        if (datosBusqueda != null && !datosBusqueda.resultado().isEmpty()){
+        if (datosBusqueda != null && !datosBusqueda.resultado().isEmpty()) {
             DatosLibro primerLibro = datosBusqueda.resultado().get(0);
+
             System.out.println(primerLibro);
 
             Libro libro = new Libro(primerLibro);
+
             System.out.println("----- Libro -----");
             System.out.println(libro);
             System.out.println("-----------------");
 
-            //repository.save(libro);
+            //repositoryLibro.save(libro);
 
-            if (!primerLibro.autor().isEmpty()){
+
+            if (!primerLibro.autor().isEmpty()) {
                 DatosAutor autor = primerLibro.autor().get(0);
-                System.out.printf("Titulo " + primerLibro.titulo() +
-                        " Autor " + autor.nombre()+
-                        " Idioma " + primerLibro.lenguaje()+
-                        " Numero de Descargas " + primerLibro.numero_descargas()
-                        +"\n");
-            }
-        } else {
-            System.out.println("No se encontraron libros");
-        }
+                //System.out.println(autor);
+                Autor autor1 = new Autor(autor);
+                var autorNombre = autor.nombre();
+                System.out.println("Autor nombre: " + autorNombre);
+                //List<Autor> autor1 = Collections.singletonList(new Autor(autor));
+                System.out.println("----- Autor -----");
+                System.out.println(autor1);
+                System.out.println("-----------------");
 
+                Optional<Autor> autorOptional = repositoryAutor.findByNombre(autor1.getNombre());
+                if (autorOptional.isPresent()) {
+                    Autor autorExiste = autorOptional.get();
+                    libro.setAutor(autorExiste);
+                    repositoryLibro.save(libro);
+                } else {
+                    Autor autorNuevo = repositoryAutor.save(autor1);
+                    libro.setAutor(autorNuevo);
+                    repositoryLibro.save(libro);
+
+                }
+
+            } else {
+                System.out.println("Sin autor");
+            }
+
+        } else {
+            System.out.println("Libro no encontrado");
+        }
     }
 
-    /*public void test(){
-        DatosBusqueda datos = getBusqueda();
-        Libro libro = new Libro(datos);
-    }*/
+
 }

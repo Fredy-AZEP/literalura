@@ -10,12 +10,14 @@ public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    @Column(unique = true)
+    //@Column(unique = true)
     private String titulo;
-    @Transient
-    private List<Autor> autor;
+    @ManyToOne
+    private Autor autor;
     private String lenguaje;
     private Integer numero_descargas;
+
+    public Libro(){}
 
     public Libro(DatosLibro datosLibro){
         this.titulo = datosLibro.titulo();
@@ -45,11 +47,11 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public List<Autor> getAutor() {
+    public Autor getAutor() {
         return autor;
     }
 
-    public void setAutor(List<Autor> autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
     }
 
