@@ -138,6 +138,12 @@ public class Principal {
                 .forEach(System.out::println);
     }
 
+    public void autoresVivosPorAno(){
+        autores = repositoryAutor.listaAutoresVivosPorAno(1600);
+        autores.stream()
+                .forEach(System.out::println);
+    }
+
 
 
 
