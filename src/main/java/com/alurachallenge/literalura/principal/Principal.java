@@ -59,8 +59,8 @@ public class Principal {
         //String json = consumoAPI.obtenerDatos(URL_BASE + "romeo");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "macbeth");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "Shakespeare%27s%20Sonnets");
-        //String json = consumoAPI.obtenerDatos(URL_BASE + "divine");
-        String json = consumoAPI.obtenerDatos(URL_BASE + "dividfdsfsdfne");
+        String json = consumoAPI.obtenerDatos(URL_BASE + "divine");
+        //String json = consumoAPI.obtenerDatos(URL_BASE + "dividfdsfsdfne");
         //System.out.printf(json + "\n");
         DatosBusqueda datos = conversor.obtenerDatos(json, DatosBusqueda.class);
         return datos;
@@ -143,8 +143,5 @@ public class Principal {
         autores.stream()
                 .forEach(System.out::println);
     }
-
-
-
 
 }
