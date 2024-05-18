@@ -3,6 +3,7 @@ package com.alurachallenge.literalura.model;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "libros")
@@ -14,22 +15,24 @@ public class Libro {
     private String titulo;
     @ManyToOne
     private Autor autor;
-    private String lenguaje;
+    @Enumerated(EnumType.STRING)
+    private Idioma lenguaje;
     private Integer numero_descargas;
 
     public Libro(){}
 
     public Libro(DatosLibro datosLibro){
         this.titulo = datosLibro.titulo();
-        this.lenguaje = datosLibro.lenguaje().toString();
+        //this.lenguaje = datosLibro.lenguaje().toString();
+        this.lenguaje = Idioma.fromString(datosLibro.lenguaje().toString().split(",")[0].trim());
         this.numero_descargas = datosLibro.numero_descargas();
     }
     @Override
     public String toString() {
-        String idioma = String.join(", ", lenguaje);
-        idioma = idioma.replace("[","").replace("]","");
+        //String idioma = String.join(", ", lenguaje);
+        //idioma = idioma.replace("[","").replace("]","");
         String nombreAutor = autor.getNombre();
-        return String.format("---------- Libro ----------%nTitulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargar: %d%n---------------------------%n",titulo,nombreAutor,idioma,numero_descargas);
+        return String.format("---------- Libro ----------%nTitulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargar: %d%n---------------------------%n",titulo,nombreAutor,lenguaje,numero_descargas);
     }
 
     public Long getId() {
@@ -56,11 +59,11 @@ public class Libro {
         this.autor = autor;
     }
 
-    public String getLenguaje() {
+    public Idioma getLenguaje() {
         return lenguaje;
     }
 
-    public void setLenguaje(String lenguaje) {
+    public void setLenguaje(Idioma lenguaje) {
         this.lenguaje = lenguaje;
     }
 

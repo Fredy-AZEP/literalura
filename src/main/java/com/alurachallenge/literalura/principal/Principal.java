@@ -59,8 +59,8 @@ public class Principal {
         //String json = consumoAPI.obtenerDatos(URL_BASE + "romeo");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "macbeth");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "Shakespeare%27s%20Sonnets");
-        String json = consumoAPI.obtenerDatos(URL_BASE + "divine");
-        //String json = consumoAPI.obtenerDatos(URL_BASE + "dividfdsfsdfne");
+        //String json = consumoAPI.obtenerDatos(URL_BASE + "divine");
+        String json = consumoAPI.obtenerDatos(URL_BASE + "dividfdsfsdfne");
         //System.out.printf(json + "\n");
         DatosBusqueda datos = conversor.obtenerDatos(json, DatosBusqueda.class);
         return datos;
@@ -110,11 +110,11 @@ public class Principal {
 
 
                 }
-                String idioma = String.join(", ", libro.getLenguaje());
-                idioma = idioma.replace("[","").replace("]","");
+                //String idioma = String.join(", ", libro.getLenguaje());
+                //idioma = idioma.replace("[","").replace("]","");
                 System.out.println("---------- Libro ----------");
                 System.out.printf("Titulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargas: %d%n"
-                        ,libro.getTitulo(),autor1.getNombre(),idioma,libro.getNumero_descargas());
+                        ,libro.getTitulo(),autor1.getNombre(),libro.getLenguaje(),libro.getNumero_descargas());
                 System.out.println("---------------------------\n");
 
             } else {
