@@ -60,6 +60,7 @@ public class Principal {
         //String json = consumoAPI.obtenerDatos(URL_BASE + "macbeth");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "Shakespeare%27s%20Sonnets");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "divine");
+        //String json = consumoAPI.obtenerDatos(URL_BASE + "quijote");
         String json = consumoAPI.obtenerDatos(URL_BASE + "dividfdsfsdfne");
         //System.out.printf(json + "\n");
         DatosBusqueda datos = conversor.obtenerDatos(json, DatosBusqueda.class);
@@ -142,6 +143,15 @@ public class Principal {
         autores = repositoryAutor.listaAutoresVivosPorAno(1600);
         autores.stream()
                 .forEach(System.out::println);
+    }
+
+    public void buscarLibroPorIdioma(){
+        //var lenguaje = "Español";
+        var idioma = Idioma.fromEspanol("Español");
+        System.out.println("Lenguaje buscado: " + idioma);
+
+        List<Libro> libroPorIdioma = repositoryLibro.findByLenguaje(idioma);
+        libroPorIdioma.forEach(System.out::println);
     }
 
 }

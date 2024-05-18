@@ -29,5 +29,6 @@ public class LiteraluraApplication implements CommandLineRunner {
 		principal.mostrarLibros();
 		principal.mostrarAutores();
 		principal.autoresVivosPorAno();
+		principal.buscarLibroPorIdioma();
     }
 }
