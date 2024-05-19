@@ -27,11 +27,15 @@ public class Principal {
     }
 
 
-    /*public void muestrMenu(){
+    public void muestrMenu(){
         var opcion = -1;
         while (opcion != 0){
             var menu = """
-                    1 - Buscar Libros
+                    1 - Buscar Libros Por Titulo
+                    2 - Mostrar Libros Registrados
+                    3 - Mostrar Autores Registrados
+                    4 - Autores Vivos En Determinado Año
+                    5 - Buscar Libros Por Idioma
                     
                     0 - Salir
                     """;
@@ -44,6 +48,18 @@ public class Principal {
                 case 1:
                     buscarLibro();
                     break;
+                case 2:
+                    mostrarLibros();
+                    break;
+                case 3:
+                    mostrarAutores();
+                    break;
+                case 4:
+                    autoresVivosPorAno();
+                    break;
+                case 5:
+                    buscarLibroPorIdioma();
+                    break;
                 case 0:
                     System.out.println("Saliendo de la Aplicaccion");
                     break;
@@ -51,7 +67,7 @@ public class Principal {
                     System.out.printf("Opcion Invalida");
             }
         }
-    }*/
+    }
 
 
     private DatosBusqueda getBusqueda() {
@@ -61,21 +77,26 @@ public class Principal {
         //String json = consumoAPI.obtenerDatos(URL_BASE + "Shakespeare%27s%20Sonnets");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "divine");
         //String json = consumoAPI.obtenerDatos(URL_BASE + "quijote");
-        String json = consumoAPI.obtenerDatos(URL_BASE + "dividfdsfsdfne");
+        //String json = consumoAPI.obtenerDatos(URL_BASE + "dividfdsfsdfne");
         //System.out.printf(json + "\n");
+
+        System.out.println("Escribe el nombre del libro: ");
+        var nombreLibro = teclado.nextLine();
+        var json = consumoAPI.obtenerDatos(URL_BASE + nombreLibro.replace(" ", "%20"));
+        //System.out.println(json);
         DatosBusqueda datos = conversor.obtenerDatos(json, DatosBusqueda.class);
         return datos;
 
     }
 
 
-    public void buscarLibro() {
+    private void buscarLibro() {
 
         DatosBusqueda datosBusqueda = getBusqueda();
         if (datosBusqueda != null && !datosBusqueda.resultado().isEmpty()) {
             DatosLibro primerLibro = datosBusqueda.resultado().get(0);
 
-            System.out.println(primerLibro);
+            //System.out.println(primerLibro);
 
             Libro libro = new Libro(primerLibro);
 
@@ -127,31 +148,77 @@ public class Principal {
         }
     }
 
-    public void mostrarLibros(){
+    private void mostrarLibros(){
         libros = repositoryLibro.findAll();
         libros.stream()
                 .forEach(System.out::println);
     }
 
-    public void mostrarAutores(){
+    private void mostrarAutores(){
         autores = repositoryAutor.findAll();
         autores.stream()
                 .forEach(System.out::println);
     }
 
-    public void autoresVivosPorAno(){
-        autores = repositoryAutor.listaAutoresVivosPorAno(1600);
+    private void autoresVivosPorAno(){
+        System.out.println("Ingresa el año vivo de autor(es) que desea buscar: ");
+        var ano = teclado.nextInt();
+        autores = repositoryAutor.listaAutoresVivosPorAno(ano);
         autores.stream()
                 .forEach(System.out::println);
     }
 
-    public void buscarLibroPorIdioma(){
+    private List<Libro> datosBusquedaLenguaje(String idioma){
+        //System.out.println("Escribe el nombre del lenguaje/idioma que desea buscar: ");
+        //var lenguaje = teclado.nextLine();
+        var dato = Idioma.fromString(idioma);
+        System.out.println("Lenguaje buscado: " + dato);
+
+        List<Libro> libroPorIdioma = repositoryLibro.findByLenguaje(dato);
+        //libroPorIdioma.forEach(System.out::println);
+        return libroPorIdioma;
+    }
+
+    private void buscarLibroPorIdioma(){
         //var lenguaje = "Español";
-        var idioma = Idioma.fromEspanol("Español");
+        //var idioma = Idioma.fromEspanol("Español");
+        /*System.out.println("Escribe el nombre del lenguaje/idioma que desea buscar: ");
+        var lenguaje = teclado.nextLine();
+        var idioma = Idioma.fromEspanol(lenguaje);
         System.out.println("Lenguaje buscado: " + idioma);
 
         List<Libro> libroPorIdioma = repositoryLibro.findByLenguaje(idioma);
-        libroPorIdioma.forEach(System.out::println);
+
+         */
+        //libroPorIdioma.forEach(System.out::println);
+        System.out.println("Selecciona el lenguaje/idioma que deseas buscar: ");
+
+        var opcion = -1;
+        while (opcion != 0){
+            var opciones = """
+                    1. en - Ingles
+                    2. es - Español
+                    
+                    0. Volver A Las Opciones Anteriores
+                    """;
+            System.out.println(opciones);
+            opcion = teclado.nextInt();
+            teclado.nextLine();
+            switch (opcion){
+                case 1:
+                    List<Libro> librosEnIngles = datosBusquedaLenguaje("[en]");
+                    librosEnIngles.forEach(System.out::println);
+                    break;
+                case 2:
+                    List<Libro> librosEnEspanol = datosBusquedaLenguaje("[es]");
+                    librosEnEspanol.forEach(System.out::println);
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Ninguna idioma seleccionado");
+            }
+        }
     }
 
 }

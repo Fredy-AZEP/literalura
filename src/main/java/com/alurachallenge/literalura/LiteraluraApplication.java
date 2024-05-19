@@ -24,11 +24,13 @@ public class LiteraluraApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		Principal principal = new Principal(repositoryLibro, repositoryAutor);
-		//principal.muestrMenu();
-		principal.buscarLibro();
+		principal.muestrMenu();
+		/*principal.buscarLibro();
 		principal.mostrarLibros();
 		principal.mostrarAutores();
 		principal.autoresVivosPorAno();
 		principal.buscarLibroPorIdioma();
+
+		 */
     }
 }
