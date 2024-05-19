@@ -177,6 +177,10 @@ public class Principal {
 
     private void autoresVivosPorAno() {
         System.out.println("Ingresa el año vivo de autor(es) que desea buscar: ");
+        while (!teclado.hasNextInt()){
+            System.out.println("Formato invalido, es necesario colocar un año: ");
+            teclado.nextLine();
+        }
         var ano = teclado.nextInt();
         autores = repositoryAutor.listaAutoresVivosPorAno(ano);
         autores.stream()
