@@ -109,41 +109,46 @@ public class Principal {
 
 
             //repositoryLibro.save(libro);
+            Optional<Libro> libroExiste = repositoryLibro.findByTitulo(libro.getTitulo());
+            if (libroExiste.isPresent()){
+                System.out.println("\nEl libro ya esta registrado!\n");
+            }else {
 
 
-            if (!primerLibro.autor().isEmpty()) {
-                DatosAutor autor = primerLibro.autor().get(0);
-                //System.out.println(autor);
-                Autor autor1 = new Autor(autor);
-                //var autorNombre = autor.nombre();
-                //System.out.println("Autor nombre: " + autorNombre);
-                //List<Autor> autor1 = Collections.singletonList(new Autor(autor));
-                //System.out.println("----- Autor -----");
-                //System.out.println(autor1);
-                //System.out.println("-----------------");
+                if (!primerLibro.autor().isEmpty()) {
+                    DatosAutor autor = primerLibro.autor().get(0);
+                    //System.out.println(autor);
+                    Autor autor1 = new Autor(autor);
+                    //var autorNombre = autor.nombre();
+                    //System.out.println("Autor nombre: " + autorNombre);
+                    //List<Autor> autor1 = Collections.singletonList(new Autor(autor));
+                    //System.out.println("----- Autor -----");
+                    //System.out.println(autor1);
+                    //System.out.println("-----------------");
 
-                Optional<Autor> autorOptional = repositoryAutor.findByNombre(autor1.getNombre());
-                if (autorOptional.isPresent()) {
-                    Autor autorExiste = autorOptional.get();
-                    libro.setAutor(autorExiste);
-                    repositoryLibro.save(libro);
+                    Optional<Autor> autorOptional = repositoryAutor.findByNombre(autor1.getNombre());
+                    if (autorOptional.isPresent()) {
+                        Autor autorExiste = autorOptional.get();
+                        libro.setAutor(autorExiste);
+                        repositoryLibro.save(libro);
+
+                    } else {
+                        Autor autorNuevo = repositoryAutor.save(autor1);
+                        libro.setAutor(autorNuevo);
+                        repositoryLibro.save(libro);
+
+
+                    }
+                    //String idioma = String.join(", ", libro.getLenguaje());
+                    //idioma = idioma.replace("[","").replace("]","");
+                    System.out.println("---------- Libro ----------");
+                    System.out.printf("Titulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargas: %d%n"
+                            , libro.getTitulo(), autor1.getNombre(), libro.getLenguaje(), libro.getNumero_descargas());
+                    System.out.println("---------------------------\n");
 
                 } else {
-                    Autor autorNuevo = repositoryAutor.save(autor1);
-                    libro.setAutor(autorNuevo);
-                    repositoryLibro.save(libro);
-
-
+                    System.out.println("Sin autor");
                 }
-                //String idioma = String.join(", ", libro.getLenguaje());
-                //idioma = idioma.replace("[","").replace("]","");
-                System.out.println("---------- Libro ----------");
-                System.out.printf("Titulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargas: %d%n"
-                        , libro.getTitulo(), autor1.getNombre(), libro.getLenguaje(), libro.getNumero_descargas());
-                System.out.println("---------------------------\n");
-
-            } else {
-                System.out.println("Sin autor");
             }
 
         } else {
