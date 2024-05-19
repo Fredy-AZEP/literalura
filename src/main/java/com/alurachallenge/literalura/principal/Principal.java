@@ -27,24 +27,27 @@ public class Principal {
     }
 
 
-    public void muestrMenu(){
+    public void muestrMenu() {
         var opcion = -1;
-        while (opcion != 0){
+        while (opcion != 0) {
             var menu = """
                     1 - Buscar Libros Por Titulo
                     2 - Mostrar Libros Registrados
                     3 - Mostrar Autores Registrados
                     4 - Autores Vivos En Determinado Año
                     5 - Buscar Libros Por Idioma
-                    
+                                        
                     0 - Salir
                     """;
-
             System.out.println(menu);
+            while (!teclado.hasNextInt()) {
+                System.out.println("Formato invalido, ingrese un numero que este disponible en el menu!");
+                teclado.nextLine();
+            }
             opcion = teclado.nextInt();
             teclado.nextLine();
 
-            switch (opcion){
+            switch (opcion) {
                 case 1:
                     buscarLibro();
                     break;
@@ -64,7 +67,7 @@ public class Principal {
                     System.out.println("Saliendo de la Aplicaccion");
                     break;
                 default:
-                    System.out.printf("Opcion Invalida");
+                    System.out.printf("Opcion Invalida\n");
             }
         }
     }
@@ -136,7 +139,7 @@ public class Principal {
                 //idioma = idioma.replace("[","").replace("]","");
                 System.out.println("---------- Libro ----------");
                 System.out.printf("Titulo: %s%nAutor: %s%nIdioma: %s%nNumero de Descargas: %d%n"
-                        ,libro.getTitulo(),autor1.getNombre(),libro.getLenguaje(),libro.getNumero_descargas());
+                        , libro.getTitulo(), autor1.getNombre(), libro.getLenguaje(), libro.getNumero_descargas());
                 System.out.println("---------------------------\n");
 
             } else {
@@ -148,19 +151,19 @@ public class Principal {
         }
     }
 
-    private void mostrarLibros(){
+    private void mostrarLibros() {
         libros = repositoryLibro.findAll();
         libros.stream()
                 .forEach(System.out::println);
     }
 
-    private void mostrarAutores(){
+    private void mostrarAutores() {
         autores = repositoryAutor.findAll();
         autores.stream()
                 .forEach(System.out::println);
     }
 
-    private void autoresVivosPorAno(){
+    private void autoresVivosPorAno() {
         System.out.println("Ingresa el año vivo de autor(es) que desea buscar: ");
         var ano = teclado.nextInt();
         autores = repositoryAutor.listaAutoresVivosPorAno(ano);
@@ -168,7 +171,7 @@ public class Principal {
                 .forEach(System.out::println);
     }
 
-    private List<Libro> datosBusquedaLenguaje(String idioma){
+    private List<Libro> datosBusquedaLenguaje(String idioma) {
         //System.out.println("Escribe el nombre del lenguaje/idioma que desea buscar: ");
         //var lenguaje = teclado.nextLine();
         var dato = Idioma.fromString(idioma);
@@ -179,7 +182,7 @@ public class Principal {
         return libroPorIdioma;
     }
 
-    private void buscarLibroPorIdioma(){
+    private void buscarLibroPorIdioma() {
         //var lenguaje = "Español";
         //var idioma = Idioma.fromEspanol("Español");
         /*System.out.println("Escribe el nombre del lenguaje/idioma que desea buscar: ");
@@ -194,17 +197,21 @@ public class Principal {
         System.out.println("Selecciona el lenguaje/idioma que deseas buscar: ");
 
         var opcion = -1;
-        while (opcion != 0){
+        while (opcion != 0) {
             var opciones = """
                     1. en - Ingles
                     2. es - Español
-                    
+                                        
                     0. Volver A Las Opciones Anteriores
                     """;
             System.out.println(opciones);
+            while (!teclado.hasNextInt()) {
+                System.out.println("Formato invalido, ingrese un numero que este disponible en el menu!");
+                teclado.nextLine();
+            }
             opcion = teclado.nextInt();
             teclado.nextLine();
-            switch (opcion){
+            switch (opcion) {
                 case 1:
                     List<Libro> librosEnIngles = datosBusquedaLenguaje("[en]");
                     librosEnIngles.forEach(System.out::println);
@@ -216,7 +223,7 @@ public class Principal {
                 case 0:
                     return;
                 default:
-                    System.out.println("Ninguna idioma seleccionado");
+                    System.out.println("Ningun idioma seleccionado");
             }
         }
     }
