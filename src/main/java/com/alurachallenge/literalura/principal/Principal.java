@@ -36,6 +36,7 @@ public class Principal {
                     3 - Mostrar Autores Registrados
                     4 - Autores Vivos En Determinado Año
                     5 - Buscar Libros Por Idioma
+                    6 - Top 10 Libros Mas Descargados
                                         
                     0 - Salir
                     """;
@@ -62,6 +63,9 @@ public class Principal {
                     break;
                 case 5:
                     buscarLibroPorIdioma();
+                    break;
+                case 6:
+                    top10Libros();
                     break;
                 case 0:
                     System.out.println("Saliendo de la Aplicaccion");
@@ -231,6 +235,11 @@ public class Principal {
                     System.out.println("Ningun idioma seleccionado");
             }
         }
+    }
+
+    private void top10Libros(){
+        List<Libro> topLibros = repositoryLibro.top10LibrosMasDescargados();
+        topLibros.forEach(System.out::println);
     }
 
 }
