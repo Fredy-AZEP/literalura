@@ -6,9 +6,8 @@ import com.alurachallenge.literalura.repository.LibroRepository;
 import com.alurachallenge.literalura.service.ConsumoAPI;
 import com.alurachallenge.literalura.service.ConvierteDatos;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -37,6 +36,7 @@ public class Principal {
                     4 - Autores Vivos En Determinado Año
                     5 - Buscar Libros Por Idioma
                     6 - Top 10 Libros Mas Descargados
+                    7 - Libro mas y menos descargado
                                         
                     0 - Salir
                     """;
@@ -66,6 +66,9 @@ public class Principal {
                     break;
                 case 6:
                     top10Libros();
+                    break;
+                case 7:
+                    estadisticasLibros();
                     break;
                 case 0:
                     System.out.println("Saliendo de la Aplicaccion");
@@ -240,6 +243,26 @@ public class Principal {
     private void top10Libros(){
         List<Libro> topLibros = repositoryLibro.top10LibrosMasDescargados();
         topLibros.forEach(System.out::println);
+    }
+
+    private void estadisticasLibros(){
+        libros = repositoryLibro.findAll();
+        IntSummaryStatistics est = libros.stream()
+                .filter(l -> l.getNumero_descargas() > 0)
+                .collect(Collectors.summarizingInt(Libro::getNumero_descargas));
+
+        Libro libroMasDescargado = libros.stream()
+                        .filter(l -> l.getNumero_descargas() == est.getMax())
+                                .findFirst()
+                                        .orElse(null);
+
+        Libro libroMenosDescargado = libros.stream()
+                        .filter(l -> l.getNumero_descargas() == est.getMin())
+                                .findFirst()
+                                        .orElse(null);
+        System.out.println("------------------------------------------------------");
+        System.out.printf("%nLibro mas descargado: %s%nNumero de descargas: %d%n%nLibro menos descargado: %s%nNumero de descargas: %d%n%n",libroMasDescargado.getTitulo(),est.getMax(),libroMenosDescargado.getTitulo(),est.getMin());
+        System.out.println("------------------------------------------------------");
     }
 
 }
